@@ -1,0 +1,53 @@
+import logging
+
+
+logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
+
+class AgriculturalCropManager:
+    def __init__(self):
+        self.soil_moisture = 50  
+        self.pest_presence = False
+        self.weather_conditions = "Clear"
+    
+    def update_soil_moisture(self, moisture):
+        self.soil_moisture = moisture
+        logging.info(f"Soil moisture updated to {moisture}%")
+        return f"Updated soil moisture to {moisture}%"
+    
+    def detect_pests(self, presence):
+        self.pest_presence = presence
+        logging.info("Pests detected! Action needed." if presence else "No pests detected.")
+        return "Pests detected! Action needed." if presence else "No pests detected."
+    
+    def update_weather(self, condition):
+        self.weather_conditions = condition
+        logging.info(f"Weather updated to {condition}")
+        return f"Weather updated to {condition}"
+    
+    def recommend_irrigation(self):
+        if self.weather_conditions.lower() == "rainy":
+            logging.info("No irrigation needed due to rainy weather.")
+            return "No irrigation needed due to rainy weather."
+        elif self.soil_moisture < 30:
+            logging.info("Irrigation needed. Soil moisture is low.")
+            return "Irrigation needed. Soil moisture is low."
+        return "No irrigation needed."
+    
+    def recommend_pesticide_application(self):
+        if self.pest_presence:
+            logging.info("Pesticide application recommended.")
+            return "Pesticide application recommended."
+        return "No pesticide application needed."
+    
+    def automated_decision(self):
+        irrigation = self.recommend_irrigation()
+        pesticide = self.recommend_pesticide_application()
+        return f"Decision Summary:\n{irrigation}\n{pesticide}"
+    
+
+if __name__ == "__main__":
+    crop_manager = AgriculturalCropManager()
+    print(crop_manager.update_soil_moisture(25))
+    print(crop_manager.detect_pests(True))
+    print(crop_manager.update_weather("Rainy"))
+    print(crop_manager.automated_decision())
