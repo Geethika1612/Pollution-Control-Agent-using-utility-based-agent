@@ -1,0 +1,63 @@
+import random
+
+class PollutionControlAgent:
+    def __init__(self):
+        self.pollution_levels = {'low': 1, 'moderate': 2, 'high': 3, 'severe': 4}
+        self.weather_conditions = {'clear': 1, 'windy': 2, 'rainy': 3}
+        self.health_risks = {'low': 1, 'medium': 2, 'high': 3, 'critical': 4}
+        self.control_strategies = [
+            "Increase public transport",
+            "Implement vehicle restrictions",
+            "Shut down industrial plants",
+            "Enhance green zones",
+            "Raise pollution tax"
+        ]
+    
+    def get_environment_state(self):
+
+        pollution = random.choice(list(self.pollution_levels.keys()))
+        weather = random.choice(list(self.weather_conditions.keys()))
+        health = random.choice(list(self.health_risks.keys()))
+        return pollution, weather, health
+    
+    def calculate_utility(self, strategy, pollution, weather, health):
+     
+        pollution_factor = self.pollution_levels[pollution]
+        weather_factor = self.weather_conditions[weather]
+        health_factor = self.health_risks[health]
+        
+        strategy_impact = {
+            "Increase public transport": 2,
+            "Implement vehicle restrictions": 3,
+            "Shut down industrial plants": 5,
+            "Enhance green zones": 2,
+            "Raise pollution tax": 3
+        }
+        
+        impact = strategy_impact[strategy]
+        utility = (impact * pollution_factor * health_factor) / weather_factor
+        return utility
+    
+    def choose_best_strategy(self):
+        
+        pollution, weather, health = self.get_environment_state()
+        print(f"Current Conditions - Pollution: {pollution}, Weather: {weather}, Health Risk: {health}")
+        
+        best_strategy = None
+        best_utility = float('-inf')
+        
+        for strategy in self.control_strategies:
+            utility = self.calculate_utility(strategy, pollution, weather, health)
+            print(f"Strategy: {strategy}, Utility Score: {utility:.2f}")
+            
+            if utility > best_utility:
+                best_utility = utility
+                best_strategy = strategy
+        
+        print(f"Best Strategy: {best_strategy} with Utility Score: {best_utility:.2f}")
+        return best_strategy
+
+
+if __name__ == "__main__":
+    agent = PollutionControlAgent()
+    agent.choose_best_strategy()
