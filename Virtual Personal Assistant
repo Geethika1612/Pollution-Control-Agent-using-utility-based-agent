@@ -1,0 +1,71 @@
+import time
+import datetime
+
+class VirtualPersonalAssistant:
+    def __init__(self):
+        self.tasks = {} 
+        self.appointments = [] 
+        self.reminders = []  
+    
+
+    def add_task(self, task, deadline):
+        self.tasks[task] = deadline
+        return f" Task {task} added with deadline: {deadline}"
+    
+    def remove_task(self, task):
+        if task in self.tasks:
+            del self.tasks[task]
+            return f" Task {task} removed."
+        return f" Task {task} not found."
+    
+    def list_tasks(self):
+        if not self.tasks:
+            return " No pending tasks."
+        return "\n".join([f" {task} - Due: {deadline}" for task, deadline in self.tasks.items()])
+    
+
+    def schedule_appointment(self, date, time, event):
+        self.appointments.append((date, time, event))
+        return f" Appointment {event} scheduled on {date} at {time}."
+    
+    def list_appointments(self):
+        if not self.appointments:
+            return " No upcoming appointments."
+        return "\n".join([f" {event} - {date} at {time}" for date, time, event in self.appointments])
+    
+
+    def get_current_time(self):
+        return f" Current Time: {datetime.datetime.now().strftime('%H:%M:%S')}"
+    
+    def get_current_date(self):
+        return f" Current Date: {datetime.datetime.now().strftime('%Y-%m-%d')}"
+    
+    
+    def set_reminder(self, message, delay):
+        reminder_time = datetime.datetime.now() + datetime.timedelta(seconds=delay)
+        self.reminders.append((reminder_time, message))
+        return f" Reminder set: {message} in {delay} seconds."
+    
+    def check_reminders(self):
+        current_time = datetime.datetime.now()
+        due_reminders = [msg for time, msg in self.reminders if current_time >= time]
+        self.reminders = [(time, msg) for time, msg in self.reminders if current_time < time]
+        return "\n".join([f" Reminder: {msg}" for msg in due_reminders]) if due_reminders else " No reminders."
+
+
+if __name__ == "__main__":
+    vpa = VirtualPersonalAssistant()
+    
+    print(vpa.add_task("Submit report", "2025-02-10"))
+    print(vpa.add_task("Doctor's appointment", "2025-02-15"))
+    print(vpa.list_tasks())
+
+    print(vpa.schedule_appointment("2025-02-12", "10:00 AM", "Team Meeting"))
+    print(vpa.list_appointments())
+
+    print(vpa.get_current_time())
+    print(vpa.get_current_date())
+
+    print(vpa.set_reminder("Meeting in 5 minutes", 5))
+    time.sleep(6)  
+    print(vpa.check_reminders())
